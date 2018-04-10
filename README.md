@@ -1,0 +1,2 @@
+# EChartsData
+从服务器端读取数据放入ECharts中，涉及JSON解析以及通过子线程更新UI
