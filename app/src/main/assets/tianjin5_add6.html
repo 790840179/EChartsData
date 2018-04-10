@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+  <head>
+    <meta charset="utf-8">
+    <title>天津地图</title>
+    <link rel="stylesheet" type="text/css" href="css/easyui.css">
+    <script type="text/javascript" src="js/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="js/layer.js"></script>
+    <script type="text/javascript" src="js/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="js/echarts4.js"></script>
+    <script type="text/javascript" src="js/tianjin.js"></script>
+    <style type="text/css">
+      	#box{
+          display: none;
+          background-color:red;
+          position: relative;
+          color: white;
+          width:25%;
+          height:25%;
+          top:-60%;
+          left:3%;
+      	}
+      	#box-title{
+          display: block;
+      	}
+
+      	/*new add*/
+  	    .panel-body {
+  	      	color:black;
+  	        background-color:transparent!important;
+  	        background-image:url(images/middle_bg.png);
+
+  	    	}
+  	    .panel-title{
+             color:rgb(255,255,255);
+             background-color:transparent;
+  	       }
+  	    .panel-header{      
+  	        background-color:transparent;
+  	        background: linear-gradient(to bottom,transparent 0,transparent 100%);
+  	       }
+  	    .panel-header, .panel-body {
+  	    	border-color: transparent;
+  	  		}
+  	    #main_layout4>.panel
+  	       {
+  	          box-shadow:0px 0px 0px 0px rgba(255,255,255,0.8) inset;border-radius:0px;
+  	       }
+  	    .panel-tool a{
+  	        width:60px;
+  	        height:15px;
+  	        font-size: 8px;
+  	        font-weight: bold;
+  	        color: transparent;
+  	        text-decoration: none;
+  	       }
+  	    .panel-tool a:hover{        
+  	        color: white;       
+  	       } 
+  	    .panel-tool .click{
+  	        opacity: 1;
+  	       }
+  	    .panel-tool a span{
+  	        text-align:left;
+  	        padding-left: 20px;
+  	        font-family:幼圆;
+  	       }
+  	    .panel-tool a:hover {
+  	        opacity: 1;
+  	        filter: alpha(opacity=100);
+  	        background-color: #3A95FE;
+  	       }
+  	    .layui-layer {
+  	        -webkit-overflow-scrolling: touch;
+  	        top: 150px;
+  	        left: 0;
+  	        margin: 0;
+  	        padding: 0;
+  	        /*background-color:rgba(0,101,103,0.4);*/
+  	        background-color: rgba(1,173,225,0.5);
+  	        -webkit-background-clip: content;
+  	        border-radius: 2px;
+  	        box-shadow: 1px 1px 50px rgba(0,0,0,.3);
+  	    	}
+  	    .layui-layer-title {
+  	        padding: 0 80px 0 20px;
+  	        height: 42px;
+  	        line-height: 42px;
+  	        border-bottom: 0px solid #eee;
+  	        font-size: 14px;
+  	        color: white;
+  	        overflow: hidden;
+  	        /*background-color: rgba(0,101,103,0.6);*/
+  	        background-color: rgba(3,71,111,0.6);
+  	        border-radius: 2px 2px 0 0;
+  	        }
+  	    .location
+  			{
+  			    position:relative;
+  			    animation-name:scale;
+  			    animation-duration:5s;
+  			    animation-timing-function:linear;
+  			    animation-delay:2s;
+  			    animation-iteration-count:infinite;
+  			    animation-direction:alternate;
+  			    animation-play-state:running;
+  			    /* Safari and Chrome: */
+  			    -webkit-animation-name:scale;
+  			    -webkit-animation-duration:8s;
+  			    -webkit-animation-timing-function:linear;
+  			    -webkit-animation-delay:2s;
+  			    -webkit-animation-iteration-count:infinite;
+  			    -webkit-animation-direction:normal;
+  			    -webkit-animation-play-state:running;
+  			}
+  			@-webkit-keyframes circle /* Safari and Chrome */
+  				{
+  				    0%   {transform: rotate(0deg);transform-orgin:50%,50%}
+  				    25%  {transform: rotate(90deg);transform-orgin:50%,50%}
+  				    50%  {transform: rotate(180deg);transform-orgin:50%,50%}
+  				    75%  {transform: rotate(270deg);transform-orgin:50%,50%}
+  				    100% {transform: rotate(360deg);transform-orgin:50%,50%}
+  			    }
+  			@-webkit-keyframes scale /* Safari and Chrome */
+  			    {
+  				    0%   { transform: scale(1.2);}
+  				    25%  { transform: scale(1.0);}
+  				    50%  { transform: scale(1.2);}
+  				    75%  { transform: scale(1.0);}
+  				    100% { transform: scale(1.2);}
+  			    }
+	  </style>
+  </head>
+  <body style="height: 100%; margin: 0">
+    <div id="main_layout4"  class="easyui-layout" fit="true" style="height: 100%; width:100%;">
+      
+      <div id="mydiv"></div>
+      <!-- <button type="button" id="button1" onclick="createChart()">js调用android</button> -->
+    </div>
+
+    <div id="box">
+        <span id="box-title"></span>
+    </div>
+    
+    <script type="text/javascript">
+      function funFromjs(){
+        document.getElementById("mydiv").innerHTML="什么玩意";
+        // myObj.funFromAndroid("我的myObj回调");
+      }
+      // var TOData = '管控中心';
+      // var geoCoordMap = {
+      //     '三源制造':[117.21,39.21],
+      //     '于家堡洲际酒店':[117.68,39.00],
+      //     '大众一汽平台零部件':[117.56,39.24],
+      //     '一汽富维':[117.561,39.227],
+      //     '新苏能源':[117.133,39.117],
+      //     '天津海河开启桥东岸':[117.679,39.000],
+      //     '其它': [116.92,38.73],
+      //     '天津海河开启桥西岸':[117.672,39.001],
+      //     '管控中心':[117.41,38.64]
+      // };
+      // var TJData = [
+      //     [
+      //       {
+      //         name:'三源制造',
+      //         value:'90',//车号
+      //         state:'正常',//状态
+      //         baojing:10,//报警
+      //         guzhang:728,//故障
+      //         tips:0,//提示
+      //         shiyan:1,//试验
+      //         zhidong:56230,//制动
+      //         zouhang:85120,//走行
+      //         fanghuo:23200,//防火
+      //         video:23561,//视频
+      //         jueyuan:56230,//绝缘
+      //         jiankong:51020,//监控
+      //         liegong:56230,//列供
+      //         weiji:16132,//微机
+      //       },
+      //       {name:TOData}
+      //     ],
+      //     [
+      //       {
+      //         name:'于家堡洲际酒店',
+      //         value:'20',//车号
+      //         state:'正常',//状态
+      //         baojing:10,//报警
+      //         guzhang:728,//故障
+      //         tips:0,//提示
+      //         shiyan:1,//试验
+      //         zhidong:56230,//制动
+      //         zouhang:85120,//走行
+      //         fanghuo:23200,//防火
+      //         video:23561,//视频
+      //         jueyuan:56230,//绝缘
+      //         jiankong:51020,//监控
+      //         liegong:56230,//列供
+      //         weiji:16132,//微机
+      //       },
+      //       {name:TOData}
+      //     ],
+      //     [
+      //       {
+      //         name:'大众一汽平台零部件',
+      //         value:'30',//车号
+      //         state:'正常',//状态
+      //         baojing:10,//报警
+      //         guzhang:728,//故障
+      //         tips:0,//提示
+      //         shiyan:1,//试验
+      //         zhidong:56230,//制动
+      //         zouhang:85120,//走行
+      //         fanghuo:23200,//防火
+      //         video:23561,//视频
+      //         jueyuan:56230,//绝缘
+      //         jiankong:51020,//监控
+      //         liegong:56230,//列供
+      //         weiji:16132,//微机
+      //       },
+      //        {name:TOData}
+      //     ],
+      //     [
+      //       {
+      //         name:'一汽富维',
+      //         value:'40',//车号
+      //         state:'正常',//状态
+      //         baojing:10,//报警
+      //         guzhang:728,//故障
+      //         tips:0,//提示
+      //         shiyan:1,//试验
+      //         zhidong:56230,//制动
+      //         zouhang:85120,//走行
+      //         fanghuo:23200,//防火
+      //         video:23561,//视频
+      //         jueyuan:56230,//绝缘
+      //         jiankong:51020,//监控
+      //         liegong:56230,//列供
+      //         weiji:16132,//微机
+      //       },
+      //        {name:TOData}
+      //     ],
+      //     [
+      //       {
+      //         name:'新苏能源',
+      //         value:'50',//车号
+      //         state:'正常',//状态
+      //         baojing:10,//报警
+      //         guzhang:728,//故障
+      //         tips:0,//提示
+      //         shiyan:1,//试验
+      //         zhidong:56230,//制动
+      //         zouhang:85120,//走行
+      //         fanghuo:23200,//防火
+      //         video:23561,//视频
+      //         jueyuan:56230,//绝缘
+      //         jiankong:51020,//监控
+      //         liegong:56230,//列供
+      //         weiji:16132,//微机
+      //       },
+      //       {name:TOData}
+      //     ],
+      //     [
+      //       {
+      //         name:'天津海河开启桥东岸',
+      //         value:'60',//车号
+      //         state:'正常',//状态
+      //         baojing:10,//报警
+      //         guzhang:728,//故障
+      //         tips:0,//提示
+      //         shiyan:1,//试验
+      //         zhidong:56230,//制动
+      //         zouhang:85120,//走行
+      //         fanghuo:23200,//防火
+      //         video:23561,//视频
+      //         jueyuan:56230,//绝缘
+      //         jiankong:51020,//监控
+      //         liegong:56230,//列供
+      //         weiji:16132,//微机
+      //       },
+      //       {name:TOData}
+      //     ],
+      //     [
+      //       {
+      //         name:'天津海河开启桥西岸',
+      //         value:'70',//车号
+      //         state:'正常',//状态
+      //         baojing:10,//报警
+      //         guzhang:728,//故障
+      //         tips:0,//提示
+      //         shiyan:1,//试验
+      //         zhidong:56230,//制动
+      //         zouhang:85120,//走行
+      //         fanghuo:23200,//防火
+      //         video:23561,//视频
+      //         jueyuan:56230,//绝缘
+      //         jiankong:51020,//监控
+      //         liegong:56230,//列供
+      //         weiji:16132,//微机
+      //       },
+      //       {name:TOData}
+      //     ]
+      // ];
+      // var TJValue = [
+      //   {name:'三源制造',value:'100'},
+      //   {name:'于家堡洲际酒店',value:'112'},
+      //   {name:'大众一汽平台零部件',value:'113'},
+      //   {name:'一汽富维',value:'114'},
+      //   {name:'新苏能源',value:'115'},
+      //   {name:'天津海河开启桥东岸',value:'116'},
+      //   {name:'其它',value:'117'},
+      //   {name:'天津海河开启桥西岸',value:'118'},
+      //   {name:'管控中心',value:'119'}
+      // ];
+      // var TJAlarmdata =[
+      //   [
+      //     {
+      //       name:'其它',
+      //       value:'150',//车号
+      //       state:'故障',//状态
+      //       baojing:10,//报警
+      //       guzhang:728,//故障
+      //       tips:0,//提示
+      //       shiyan:1,//试验
+      //       zhidong:56230,//制动
+      //       zouhang:85120,//走行
+      //       fanghuo:23200,//防火
+      //       video:23561,//视频
+      //       jueyuan:56230,//绝缘
+      //       jiankong:51020,//监控
+      //       liegong:56230,//列供
+      //       weiji:16132,//微机
+      //     }, 
+      //     {name:TOData}
+      //   ]
+      // ];
+      
+      // var myChart;
+      // require.config({
+      //   paths:{
+      //     echarts:'./js'
+      //   }
+      // });
+      
+
+function createChart(TJData){
+//       function createChart(){
+//         var TJData = [{
+//   "stationone": {
+//     "name": "三源制造",
+//     "value": "90",
+//     "state": "正常",
+//     "baojing": "10",
+//     "guzhang": "728",
+//     "tips": "0"
+//   },
+//   "stationtwo": {
+//     "name": "管控中心"
+//   }
+// }, {
+//   "stationone": {
+//     "name": "于家堡洲际酒店",
+//     "value": "20",
+//     "state": "正常",
+//     "baojing": "10",
+//     "guzhang": "728",
+//     "tips": "0"
+//   },
+//   "stationtwo": {
+//     "name": "管控中心"
+//   }
+// }, {
+//   "stationone": {
+//     "name": "大众一汽平台零部件",
+//     "value": "30",
+//     "state": "正常",
+//     "baojing": "10",
+//     "guzhang": "728",
+//     "tips": "0"
+//   },
+//   "stationtwo": {
+//     "name": "管控中心"
+//   }
+// }, {
+//   "stationone": {
+//     "name": "一汽富维",
+//     "value": "40",
+//     "state": "正常",
+//     "baojing": "10",
+//     "guzhang": "728",
+//     "tips": "0"
+//   },
+//   "stationtwo": {
+//     "name": "管控中心"
+//   }
+// }, {
+//   "stationone": {
+//     "name": "新苏能源",
+//     "value": "50",
+//     "state": "正常",
+//     "baojing": "10",
+//     "guzhang": "728",
+//     "tips": "0"
+//   },
+//   "stationtwo": {
+//     "name": "管控中心"
+//   }
+// }, {
+//   "stationone": {
+//     "name": "天津海河开启桥东岸",
+//     "value": "60",
+//     "state": "正常",
+//     "baojing": "10",
+//     "guzhang": "728",
+//     "tips": "0"
+//   },
+//   "stationtwo": {
+//     "name": "管控中心"
+//   }
+// }, {
+//   "stationone": {
+//     "name": "天津海河开启桥西岸",
+//     "value": "70",
+//     "state": "正常",
+//     "baojing": "10",
+//     "guzhang": "728",
+//     "tips": "0"
+//   },
+//   "stationtwo": {
+//     "name": "管控中心"
+//   }
+// }]
+        var geoCoordMap = {
+          '三源制造':[117.21,39.21],
+          '于家堡洲际酒店':[117.68,39.00],
+          '大众一汽平台零部件':[117.56,39.24],
+          '一汽富维':[117.561,39.227],
+          '新苏能源':[117.133,39.117],
+          '天津海河开启桥东岸':[117.679,39.000],
+          '其它': [116.92,38.73],
+          '天津海河开启桥西岸':[117.672,39.001],
+          '管控中心':[117.41,38.64]};
+        var TOData = '管控中心';
+        var convertDataNew2 = function(data){
+          var res=[];
+          for(var i =0;i<data.length;i++){
+            var dataItem = data[i];
+            var fromCoord = geoCoordMap[dataItem.stationone.name];
+            var toCoord = geoCoordMap[dataItem.stationtwo.name];
+            if(fromCoord && toCoord){
+              res.push([{
+                coord:fromCoord,
+                value:dataItem.stationone.value
+              },{
+                coord:toCoord,
+              }]);
+            }
+          }
+          return res;
+        };
+
+        // var convertDataNew = function(data){
+        //   var res = [];
+        //   for(var i=0;i<data.length;i++){
+        //     var dataItem = data[i];
+        //     var fromCoord = geoCoordMap[dataItem[0].name];
+        //     var toCoord = geoCoordMap[dataItem[1].name];
+        //     if(fromCoord && toCoord){
+        //       res.push([{
+        //         coord:fromCoord,
+        //         value:dataItem[0].value
+        //       },{
+        //         coord:toCoord,
+        //       }]);
+        //     }
+        //   }
+        //   return res;
+        // };
+        
+        var color = ['#a6c84c', '#ffa022', '#46bee9'];
+        var series = [];
+        [
+            [TOData, TJData]
+        ].forEach(function(item, i) {
+            series.push(
+                {
+                    type: 'lines',
+                    zlevel: 2,
+                    effect: {
+                        show: true,
+                        period: 4,
+                        trailLength: 0.02,
+                        symbol: 'arrow',
+                        symbolSize: 5,
+                    },
+                    lineStyle: {
+                        normal: {
+                            width: 1,
+                            opacity: 0.6,
+                            curveness: 0.2
+                        }
+                    },
+
+                    // data: convertDataNew(item[1])
+                    data:convertDataNew2(item[1])
+                }, {
+                    type: 'effectScatter',
+                    coordinateSystem: 'geo',
+                    zlevel: 2,
+                    rippleEffect: {
+                        period: 4,
+                        brushType: 'stroke',
+                        scale: 4
+                    },
+                    label: {
+                        normal: {
+                            show: true,
+                            position: 'right',
+                            offset: [5, 0],
+                            formatter: '{b}'
+                        },
+                        emphasis: {
+                            show: true
+                        }
+                    },
+                    symbol: 'circle',
+                    symbolSize: function(val) {
+                        return 4 + val[2] / 10;
+                    },
+                    itemStyle: {
+                        normal: {
+                            show: false,
+                            color: '#f00'
+                        }
+                    },
+                    data: item[1].map(function(dataItem) {
+                        return {
+                            // name: dataItem[0].name,
+                            // value: geoCoordMap[dataItem[0].name].concat([dataItem[0].value])
+                            name:dataItem.stationone.name,
+                            // value:dataItem.stationone.value,
+							value:geoCoordMap[dataItem.stationone.name].concat([dataItem.stationone.value]),
+                        };
+                    }),
+                },
+                //被攻击点
+                {
+                    type: 'scatter',
+                    coordinateSystem: 'geo',
+                    zlevel: 2,
+                    rippleEffect: {
+                        period: 4,
+                        brushType: 'stroke',
+                        scale: 4
+                    },
+                    label: {
+                        normal: {
+                            show: true,
+                            position: 'right',
+                            //offset:[5, 0],
+
+                            color: '#00ffff',
+                            formatter: '{b}',
+                            textStyle: {
+                                color: "#00ffff"
+                            }
+                        },
+                        emphasis: {
+                            show: true
+                        }
+                    },
+                    symbol: 'pin',
+                    symbolSize: 30,
+                    itemStyle: {
+                        normal: {
+                            show: true,
+                            color: '#9966cc'
+                        }
+                    },
+                    data: [{
+                        // name: item[0],
+                        // value: geoCoordMap[item[0]].concat([100]),
+                        name:item[0],
+                        // value:"666"
+						value:geoCoordMap[item[0]].concat([100]),
+                    }],
+                }
+            );
+        });
+        var dom = document.getElementById("main_layout4");
+        var myChart = echarts.init(dom);
+        option={
+          backgroundColor:'#1A7D98',
+          visualMap: {
+            min: 0,
+            max: 100,
+            calculable: true,
+            color: ['#ff3333', 'orange', 'yellow', 'lime', 'aqua'],
+            textStyle: {
+                color: '#fff'
+              }
+            },
+          geo: {
+              show:true,
+              map: '天津',
+              zoom:1,
+              label: {
+                normal:{
+                  //是否在普通状态下显示标签
+                  show:true,
+                  color:'#ddd',
+                },
+                emphasis: {
+                    //鼠标放在上面是否显示区民
+                  show: true,
+                  color:'#ddd',
+                }
+              },
+              //是否可以点击鼠标，滚轮缩放
+              roam: true,
+              layoutCenter: ['50%', '53%'],
+              layoutSize: "108%",
+              itemStyle: {
+                  normal: {
+                    areaColor:['rgba(0,80,159,0.3)','rgba(0,47,79,0.3)'],
+                    //边框颜色
+                    borderColor: '#00C9FE',
+                    //柱条描边宽度
+                    borderWidth:0.5,
+                    //柱条的描边类型,solid、dashed、dotted
+                    borderType:'dashed',
+                    //图形阴影的模糊大小
+                    shadowBlur:0,
+                    //阴影水平方向上的偏移距离。 
+                    shadowOffsetX:0,
+                    shadowOffsetY:0,
+                    shadowColor:'#fff'
+                  },
+                  emphasis: {
+                      color: 'rgba(37, 43, 61, .5)',
+                      areaColor: '#2a333d'
+                  }
+              }
+          },
+          series: series
+        };
+        if (option && typeof option === "object") {
+          myChart.setOption(option, true);
+        }
+        myChart.on('click',function(params){
+          if(params.componentType === 'series'){
+            layer.open({
+              type:1,
+              title:params.data.name,
+              area: ['200px', '260px'],
+              // skin:'layui-layer',
+              shadeClose:false,
+              anim:3,
+              content:'<div class="layui-anim-rotate"><table  style="position:absolute;left:20%;width:80%;height:99%;color:black"><tr><td style="aligh:right"><img src="images/drop.png" style="width:24px;height:36px"></img></td><td>'+params.data.value[2]+'&nbspt</td></tr>' +
+                          '<tr><td style="aligh:right"><img src="images/power.png" style="width:24px;height:32px"></img></td><td>13423&nbspkWh</td></tr>' +
+                          '<tr><td style="aligh:right"><img src="images/gas.png" style="width:28px;height:32px"></img></td><td>1345&nbspm<sup>2</sup></td></tr>' +'<tr><td style="aligh:right"><img src="images/temp.png" style="width:28px;height:36px"></img></td><td>76&nbsp℃</td></tr>' +
+                          '</table></div>'
+              });
+            }
+          })
+        }
+    </script>
+  </body>
+</html>
+
