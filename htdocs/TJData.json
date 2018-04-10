@@ -1,0 +1,85 @@
+[{
+	"stationone": {
+		"name": "三源制造",
+		"value": "90",
+		"state": "正常",
+		"baojing": "10",
+		"guzhang": "728",
+		"tips": "0"
+	},
+	"stationtwo": {
+		"name": "管控中心"
+	}
+}, {
+	"stationone": {
+		"name": "于家堡洲际酒店",
+		"value": "20",
+		"state": "正常",
+		"baojing": "10",
+		"guzhang": "728",
+		"tips": "0"
+	},
+	"stationtwo": {
+		"name": "管控中心"
+	}
+}, {
+	"stationone": {
+		"name": "大众一汽平台零部件",
+		"value": "30",
+		"state": "正常",
+		"baojing": "10",
+		"guzhang": "728",
+		"tips": "0"
+	},
+	"stationtwo": {
+		"name": "管控中心"
+	}
+}, {
+	"stationone": {
+		"name": "一汽富维",
+		"value": "40",
+		"state": "正常",
+		"baojing": "10",
+		"guzhang": "728",
+		"tips": "0"
+	},
+	"stationtwo": {
+		"name": "管控中心"
+	}
+}, {
+	"stationone": {
+		"name": "新苏能源",
+		"value": "50",
+		"state": "正常",
+		"baojing": "10",
+		"guzhang": "728",
+		"tips": "0"
+	},
+	"stationtwo": {
+		"name": "管控中心"
+	}
+}, {
+	"stationone": {
+		"name": "天津海河开启桥东岸",
+		"value": "60",
+		"state": "正常",
+		"baojing": "10",
+		"guzhang": "728",
+		"tips": "0"
+	},
+	"stationtwo": {
+		"name": "管控中心"
+	}
+}, {
+	"stationone": {
+		"name": "天津海河开启桥西岸",
+		"value": "70",
+		"state": "正常",
+		"baojing": "10",
+		"guzhang": "728",
+		"tips": "0"
+	},
+	"stationtwo": {
+		"name": "管控中心"
+	}
+}]

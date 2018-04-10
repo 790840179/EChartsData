@@ -1,0 +1,13 @@
+{
+	"stationone": {
+		"name": "其它",
+		"value": "150",
+		"state": "故障",
+		"baojing": "10",
+		"guzhang": "728",
+		"tips": "0"
+	},
+	"stationtwo": {
+		"name": "管控中心"
+	}
+}
